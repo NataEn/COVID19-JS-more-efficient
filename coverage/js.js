@@ -184,13 +184,11 @@ function arrangeInfo([globalInfo, countries]) {
 function filterByContinentAndCovidParam(continent, param) {
   let labels = [],
     data = [];
-  debugger;
   if (continent !== "World") {
     Object.entries(appInfo[continent]).forEach(([country, countryData]) => {
       labels.push(country);
       data.push(countryData[param]);
     });
-    debugger;
   } else {
     Object.values(appInfo).forEach((continentData) => {
       Object.entries(continentData).forEach(([country, countryData]) => {
@@ -232,7 +230,6 @@ function createCountriesButtons(continent) {
 }
 
 function handleParamOrContinentClick(event) {
-  debugger;
   const continent = event.target.dataset.continent || chartData.location;
   const covidParam = event.target.dataset["covidParam"] || chartData.covidParam;
   const filteredData = filterByContinentAndCovidParam(continent, covidParam);
@@ -254,46 +251,46 @@ const handleCountryClick = (event) => {
   showElement(countryDataElement);
 };
 
-function getData() {
-  const globalInfoPromise = fetchGlobalInfo();
-  const countriesPromise = fetchCountriesInContinent();
-  const results = Promise.all([globalInfoPromise, countriesPromise]);
-  results
-    .then((res) => {
-      arrangeInfo(res);
-      createChartElem();
-      //filtering data
-      filterByContinentAndCovidParam("World", "confirmed");
-      //update chart
-      updateChart();
-      //showchart
-      //create continents buttons
-      Object.keys(appInfo).forEach((param) => {
-        const button = createButton(param, handleParamOrContinentClick, {
-          continent: param,
-        });
-        continentsElement.appendChild(button);
-      });
-      //create a World button"
-      const button = createButton("World", handleParamOrContinentClick, {
-        continent: "World",
-      });
-      continentsElement.appendChild(button);
-      //create countries
-      Object.keys(appInfo).forEach((continent) =>
-        createCountriesButtons(continent)
-      );
+// function getData() {
+//   const globalInfoPromise = fetchGlobalInfo();
+//   const countriesPromise = fetchCountriesInContinent();
+//   const results = Promise.all([globalInfoPromise, countriesPromise]);
+//   results
+//     .then((res) => {
+//       arrangeInfo(res);
+//       createChartElem();
+//       //filtering data
+//       filterByContinentAndCovidParam("World", "confirmed");
+//       //update chart
+//       updateChart();
+//       //showchart
+//       //create continents buttons
+//       Object.keys(appInfo).forEach((param) => {
+//         const button = createButton(param, handleParamOrContinentClick, {
+//           continent: param,
+//         });
+//         continentsElement.appendChild(button);
+//       });
+//       //create a World button"
+//       const button = createButton("World", handleParamOrContinentClick, {
+//         continent: "World",
+//       });
+//       continentsElement.appendChild(button);
+//       //create countries
+//       Object.keys(appInfo).forEach((continent) =>
+//         createCountriesButtons(continent)
+//       );
 
-      //create covidParams
-      covidParams.forEach((param) => {
-        const button = createButton(param, handleParamOrContinentClick, {
-          covidParam: param,
-        });
-        covidParamsElement.appendChild(button);
-      });
-    })
-    .catch((err) => console.error(err));
-}
+//       //create covidParams
+//       covidParams.forEach((param) => {
+//         const button = createButton(param, handleParamOrContinentClick, {
+//           covidParam: param,
+//         });
+//         covidParamsElement.appendChild(button);
+//       });
+//     })
+//     .catch((err) => console.error(err));
+// }
 function getDatafromServer() {
   fetch("http://localhost:5000/api/collect")
     .then((res) => res.json())
